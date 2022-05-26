@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class = "row">
+    <div class="col-md-10 offset-md-3">
+    <div class="col-lg-8">
+    <h3>Makaleler</h3>
+    
+
+
+        <form>
+            {% csrf_token %}
+          <input type="text" name = "keyword" class="input-sm" maxlength="64" placeholder="Ara">
+          <button type="submit" class="btn btn btn-danger">Ara</button>
+        </form>
+      
+        <hr>
+    </div>
+    
+    </div>
+    </div>
+{% if articles %}
+
+  {% for article in articles %}
+
+<div class="row">
+    <div class="col-md-10 offset-md-3">
+    <!-- Post content-->
+    <div class="col-lg-8">
+        <article>
+            <!-- Post header-->
+            <header class="mb-4">
+                <!-- Post title-->
+                <a href="{% url 'article:detail' article.id %}">
+                    <h2 class="fw-bolder mb-1">{{ article.title }}</h2>
+                </a>
+                <!-- Post meta content-->
+                <div class="text-muted fst-italic mb-2"> {{ article.author.username }} tarafından yayımlandı </div>
+                <hr>
+                <p>{{ article.created_date }}</p>
+                <hr>
+               <!--Preview image-->
+               {% if article.article_image %}
+               <a href="{% url 'article:detail' article.id %}">
+               <img class="img-fluid rounded" src="{{article.article_image.url}}" alt="" /></a> {% endif %}
+            </header>
+            <!-- Post content-->
+           <p class="lead">
+               {{ article.content|safe | truncatewords:30 }}
+           </p>
+           <a style="float :right;" href="{% url 'article:detail' article.id %}" class="btn btn-danger">Devamını Oku..</a>
+        </article>
+    </div> 
+</div>
+    {% endfor %}
+  {% else %}
+<div class= "row">
+    <div class="col-md-10 offset-md-3">
+    <div class="col-lg-8">
+    <div class="alert -alert-danger">
+        Makale Bulunamadı
+    </div>
+    </div>
+    </div>
+    </div>
+  {% endif %}
+
+{% endblock body %}
